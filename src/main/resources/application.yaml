@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: spring-aws-s3
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+  cloud:
+    aws:
+      credentials:
+        access-key: none
+        secret-key: none
+      region:
+        static: sa-east-1
+      endpoint: http://localhost:4566
+      s3:
+        path-style-access-enabled: true
