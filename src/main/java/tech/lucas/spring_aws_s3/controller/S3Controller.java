@@ -9,6 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 import tech.lucas.spring_aws_s3.service.S3Service;
 
 import java.io.IOException;
+import java.net.URL;
 
 @RestController
 @RequestMapping("/s3")
@@ -37,5 +38,15 @@ public class S3Controller {
         } catch (IOException e) {
             return ResponseEntity.status(500).body(new byte[0]);
         }
+    }
+
+    @GetMapping("/generate-presigned-url")
+    public ResponseEntity<String> generatePresignedUrl(
+            @RequestParam String bucketName,
+            @RequestParam String fileName,
+            @RequestParam(defaultValue = "5") Long durationMinutes) {
+        URL presignedUrl = s3Service.generatePresignedUrl(bucketName, fileName, durationMinutes);
+        log.info("URL (GET) gerada com sucesso!");
+        return ResponseEntity.ok(presignedUrl.toString());
     }
 }

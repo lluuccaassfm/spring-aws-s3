@@ -11,6 +11,8 @@ import software.amazon.awssdk.services.s3.S3Client;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
+import java.time.Duration;
 
 @Service
 public class S3Service {
@@ -40,6 +42,11 @@ public class S3Service {
         } catch (IOException e) {
             throw new IOException("Failed to read resource content", e);
         }
+    }
+
+    public URL generatePresignedUrl(String bucketName, String fileName, Long durationMinutes) {
+        log.info("Gerando URL pré-assinada do arquivo {} por {} minutos", fileName, durationMinutes);
+        return s3Template.createSignedGetURL(bucketName, fileName, Duration.ofMinutes(durationMinutes));
     }
 
     private void createBucket(String bucketName) {
