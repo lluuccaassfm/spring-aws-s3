@@ -55,9 +55,10 @@ public class S3Service {
             log.info("Bucket '{}' criado.", bucketName);
         } catch (software.amazon.awssdk.services.s3.model.S3Exception e) {
             // Ignora se o bucket já existe
-            if (!e.awsErrorDetails().errorMessage().contains("BucketAlreadyOwnedByYou")) {
-                log.warn("Erro ao criar o bucket: {}", e.getMessage());
-                e.printStackTrace();
+            if (e.awsErrorDetails().errorCode().equals("BucketAlreadyOwnedByYou")) {
+                log.warn("O bucket já existe: {}", e.getMessage());
+            } else {
+                throw new RuntimeException(e);
             }
         }
     }
